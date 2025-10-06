@@ -1,5 +1,12 @@
 from schemas.movies import (
-    MovieDetailSchema,
-    MovieListResponseSchema,
-    MovieListItemSchema
+    MovieBaseSchema,
+    MovieCreateSchema,
+    MoviesPage,
+    MovieResponseSchema,
+    MovieUpdateSchema,
+    CountryResponse,
+    GenreResponse,
+    ActorResponse,
+    LanguageResponse,
+    MovieDetailResponseSchema,
 )

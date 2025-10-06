@@ -5,23 +5,26 @@ description = "Mate task for first lesson"
 authors = ["Yurii Okal <yurii.okal@mate.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
-fastapi = "^0.115.6"
+python = "^3.13"
+fastapi = "^0.118.0"
 sqlalchemy = "^2.0.36"
-pytest = "^8.3.4"
+pydantic = "^2.10.11"
 pydantic-settings = "^2.7.0"
+pytest = "^8.4.0"
+pytest-asyncio = "^0.25.3"
+httpx = "^0.28.1"
+uvicorn = "^0.23.2"
 pandas = "^2.2.3"
 tqdm = "^4.67.1"
-uvicorn = "^0.34.0"
-httpx = "^0.28.1"
 pytest-env = "^1.1.5"
 flake8 = "^7.1.1"
 psycopg2-binary = "^2.9.10"
 alembic = "^1.14.0"
 aiosqlite = "^0.21.0"
 asyncpg = "^0.30.0"
-pytest-asyncio = "^0.25.3"
-
+greenlet = "^3.2.4"
+poetry-core = "^2.2.1"
+fastapi-pagination = "^0.14.2"
 
 [build-system]
 requires = ["poetry-core"]
