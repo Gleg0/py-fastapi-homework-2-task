@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status, Request
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi_pagination.ext.sqlalchemy import apaginate
@@ -15,9 +15,10 @@ router = APIRouter(prefix="/movies", tags=["Movies"])
 
 @router.get("/", response_model=MoviesPage)
 async def get_movies(
+        request: Request,
         db: AsyncSession = Depends(get_db),
         page: int = Query(1, ge=1),
-        per_page: int = Query(10, ge=1, le=20)
+        per_page: int = Query(10, ge=1, le=20),
 ):
     params = Params(page=page, size=per_page)
     stmt = select(MovieModel).order_by(MovieModel.id.desc())
@@ -26,10 +27,12 @@ async def get_movies(
     if page.total == 0 or not page.items:
         raise HTTPException(status_code=404, detail="No movies found.")
 
+    base_path = "/theater/movies/"
+
     return {
         "movies": page.items,
-        "prev_page": f"/theater/movies/?page={page.page - 1}&per_page={page.size}" if page.page > 1 else None,
-        "next_page": f"/theater/movies/?page={page.page + 1}&per_page={page.size}" if page.page < page.pages else None,
+        "prev_page": f"{base_path}?page={page.page - 1}&per_page={page.size}" if page.page > 1 else None,
+        "next_page": f"{base_path}?page={page.page + 1}&per_page={page.size}" if page.page < page.pages else None,
         "total_pages": page.pages,
         "total_items": page.total,
     }
@@ -58,7 +61,7 @@ async def create_movie(
         await db.flush()
 
     genre_objs = []
-    for genre_name in movie.genres:
+    for genre_name in movie.genres or []:
         stmt = select(GenreModel).where(GenreModel.name == genre_name)
         result = await db.execute(stmt)
         genre = result.scalar_one_or_none()
@@ -69,7 +72,7 @@ async def create_movie(
         genre_objs.append(genre)
 
     actor_objs = []
-    for actor_name in movie.actors:
+    for actor_name in movie.actors or []:
         stmt = select(ActorModel).where(ActorModel.name == actor_name)
         result = await db.execute(stmt)
         actor = result.scalar_one_or_none()
@@ -80,7 +83,7 @@ async def create_movie(
         actor_objs.append(actor)
 
     language_objs = []
-    for lang_name in movie.languages:
+    for lang_name in movie.languages or []:
         stmt = select(LanguageModel).where(LanguageModel.name == lang_name)
         result = await db.execute(stmt)
         lang = result.scalar_one_or_none()

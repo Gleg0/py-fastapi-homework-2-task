@@ -1,4 +1,4 @@
-from schemas.movies import (
+from .movies import (
     MovieBaseSchema,
     MovieCreateSchema,
     MoviesPage,
