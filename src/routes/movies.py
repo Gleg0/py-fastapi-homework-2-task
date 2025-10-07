@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Query, status, Request
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi_pagination.ext.sqlalchemy import apaginate
@@ -15,7 +15,6 @@ router = APIRouter(prefix="/movies", tags=["Movies"])
 
 @router.get("/", response_model=MoviesPage)
 async def get_movies(
-        request: Request,
         db: AsyncSession = Depends(get_db),
         page: int = Query(1, ge=1),
         per_page: int = Query(10, ge=1, le=20),
